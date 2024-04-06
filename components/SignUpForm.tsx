@@ -16,6 +16,8 @@ import validator from "validator";
 import { z } from "zod";
 import PasswordStrength from "./PasswordStrength";
 import { passwordStrength } from "check-password-strength";
+import { registerUser } from "@/lib/actions/authActions";
+import { toast } from "react-toastify";
 
 const FormSchema = z
   .object({
@@ -79,7 +81,15 @@ export default function SignUpForm() {
 
   // handle form submission
   const onSubmit: SubmitHandler<inputForm> = async (data) => {
-    console.log(data);
+    const { confirmPassword, ...dataWithoutConfirmPassword } = data;
+
+    try {
+      const result = await registerUser(dataWithoutConfirmPassword);
+      toast.success("The User Registered Successfully");
+    } catch (error) {
+      toast.error("Something Went Wrong!");
+      console.error(error);
+    }
   };
 
   return (
