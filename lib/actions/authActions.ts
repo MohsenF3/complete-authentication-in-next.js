@@ -1,6 +1,6 @@
 "use server";
 
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { User } from "@prisma/client";
 import prisma from "../prisma";
 

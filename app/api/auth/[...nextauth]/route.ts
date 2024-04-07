@@ -1,10 +1,14 @@
 import prisma from "@/lib/prisma";
 import { AuthOptions } from "next-auth";
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth/next";
+import { User } from "@prisma/client";
 
 export const authOptions: AuthOptions = {
+  pages: {
+    signIn: "/auth/signin",
+  },
   // authentication options
   providers: [
     CredentialsProvider({
@@ -35,12 +39,13 @@ export const authOptions: AuthOptions = {
           throw new Error("Please provide your password");
 
         // verify the password using bcrypt
-        const isPasswordCorrect = bcrypt.compare(
+        const isPasswordCorrect = await bcrypt.compare(
           credentials.password,
           user.password
         );
 
-        if (!isPasswordCorrect) throw new Error("Your password is incorrect");
+        if (!isPasswordCorrect)
+          throw new Error("User name or password is not correct");
 
         // return user object without password field
         const { password, ...userWithoutPassword } = user;
@@ -48,6 +53,18 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.user = user as User;
+
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = token.user;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

@@ -65,10 +65,11 @@ export default function SignUpForm() {
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<inputForm>({
     resolver: zodResolver(FormSchema),
   });
+
   const [passStrength, setPassStrength] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -86,6 +87,7 @@ export default function SignUpForm() {
     try {
       const result = await registerUser(dataWithoutConfirmPassword);
       toast.success("The User Registered Successfully");
+      reset();
     } catch (error) {
       toast.error("Something Went Wrong!");
       console.error(error);
@@ -94,8 +96,7 @@ export default function SignUpForm() {
 
   return (
     <form
-      action=""
-      className="grid md:grid-cols-2 grid-cols-1 gap-5 border p-5 rounded-xl my-5"
+      className="grid md:grid-cols-2 grid-cols-1 gap-5 border p-5 rounded-xl my-5 bg-slate-200"
       onSubmit={handleSubmit(onSubmit)}
     >
       {/* fist name */}
@@ -147,11 +148,13 @@ export default function SignUpForm() {
         type={isVisible ? "text" : "password"}
         startContent={<KeyIcon className="w-4" />}
         endContent={
-          isVisible ? (
-            <EyeSlashIcon className="w-4" onClick={toggleVisible} />
-          ) : (
-            <EyeIcon className="w-4" onClick={toggleVisible} />
-          )
+          <button onClick={toggleVisible}>
+            {isVisible ? (
+              <EyeSlashIcon className="w-4" />
+            ) : (
+              <EyeIcon className="w-4" />
+            )}
+          </button>
         }
       />
 
@@ -170,7 +173,7 @@ export default function SignUpForm() {
       />
 
       <div className="flex justify-end col-span-2">
-        <Button type="submit" color="success">
+        <Button type="submit" color="success" isLoading={isSubmitting}>
           Submit
         </Button>
       </div>
