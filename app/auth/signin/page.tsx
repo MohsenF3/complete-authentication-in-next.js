@@ -15,7 +15,7 @@ export default function SignInPage({ searchParams }: SignInPageProps) {
       {/* link to forgot password page */}
       <div className="text-center">
         <Link
-          href="/auth/forgotPass"
+          href="/auth/forgotPassword"
           className="block hover:text-sky-500 transition-colors mb-4"
         >
           Forgot your password?
