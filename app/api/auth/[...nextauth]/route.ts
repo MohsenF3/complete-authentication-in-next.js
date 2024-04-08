@@ -9,6 +9,9 @@ export const authOptions: AuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
+  session: {
+    strategy: "jwt",
+  },
   // authentication options
   providers: [
     CredentialsProvider({

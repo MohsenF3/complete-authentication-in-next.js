@@ -11,7 +11,9 @@ export default function SignInButton() {
     <div className="flex items-center gap-3">
       {session && session.user ? (
         <>
-          <p>{`${session.user.firstName} ${session.user.lastName}`}</p>
+          <Button as={Link} href="/profile" color="default">
+            Profile
+          </Button>
           <Button
             as={Link}
             href="/api/auth/signout"

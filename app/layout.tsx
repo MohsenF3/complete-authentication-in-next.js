@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <AppBar />
-          {children}
+          <main className="max-w-6xl mx-auto">{children}</main>
           <ToastContainer />
         </Providers>
       </body>
