@@ -33,10 +33,10 @@ export const authOptions: AuthOptions = {
         });
 
         // user not found throw error
-        if (!user) throw new Error("User name or password is not correct");
+        if (!user) throw new Error("User name or password is not correct!");
 
         if (!credentials?.password)
-          throw new Error("Please provide your password");
+          throw new Error("Please provide your password!");
 
         // verify the password using bcrypt
         const isPasswordCorrect = await bcrypt.compare(
@@ -45,7 +45,11 @@ export const authOptions: AuthOptions = {
         );
 
         if (!isPasswordCorrect)
-          throw new Error("User name or password is not correct");
+          throw new Error("User name or password is not correct!");
+
+        // throw error if user not verified its account
+        if (!user.emailVerified)
+          throw new Error("Please verify your email first!");
 
         // return user object without password field
         const { password, ...userWithoutPassword } = user;
